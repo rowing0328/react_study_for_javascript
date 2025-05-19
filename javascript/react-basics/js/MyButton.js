@@ -1,4 +1,4 @@
-function myButton() {
+function MyButton() {
     const [isClicked, setIsClicked] = React.useState(false);
 
     return React.createElement(
@@ -7,5 +7,5 @@ function myButton() {
         isClicked ? "클릭되었습니다." : "클릭해 주세요.");
 
     const root = ReactDOM.createRoot(document.getElementById("root"));
-    root.render(React.createElement(myButton));
+    root.render(React.createElement(MyButton));
 }
