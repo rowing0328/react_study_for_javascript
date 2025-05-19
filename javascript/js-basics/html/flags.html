@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Document</title>
+
+    <!-- 실행에 필요한 라이브러리를 추가 -->
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.9.0/axios.min.js"></script>
+</head>
+<body>
+    <h1>국기 정보를 가져와서 국가와 국기 이미지를 출력하는 프로그램</h1>
+    <input type="text" placeholder="검색할 국가명을 입력하세요." />
+
+    <!-- 국기와 국가를 출력-->
+    <ul>
+
+    </ul>
+
+    <script>
+        // 국기, 국가 정보를 담을 배열
+        let datas = [];
+
+
+        // 국기, 국가 정보를 출력하는 함수
+        const showFlagAndNation = nfs => {
+            $('ul').empty();
+            nfs.map(v => {
+                const li = `
+                    <li>
+                        <img src="${v.flags.png}" style="width:50px;">
+                        <p>${v.name.common}</p>
+                    </li>
+                `;
+                $('ul').append(li);
+            });
+        };
+
+        const url = "https://restcountries.com/v3.1/all?fields=name,flags";
+        axios
+            .get(url)
+            .then(res => {
+                // 가져온 데이터를 전역변수에 할당하고, 국기, 국가를 출력
+                datas = res.data;
+                showFlagAndNation(datas);
+            })
+            .catch(err => console.log(err));
+
+
+        // input 입력창에 키를 눌렀다가 땔 때 발생하는 이벤트를 처리
+        $('input').on('keyup', e => {
+            // 키를 눌렀다가 땔 때 입력창의 내용을 콘솔에 출력
+            console.log(e.currentTarget.value);
+
+
+            // 입력창의 글자가 포함된 국가명의 데이터만 추출
+            const inputText = e.currentTarget.value;
+            const filteredData = datas.filter(v => v.name.common.indexOf(inputText) >= 0);
+            showFlagAndNation(filteredData);
+
+        });
+    </script>
+</body>
+</html>
